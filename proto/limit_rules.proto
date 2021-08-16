@@ -1,0 +1,57 @@
+syntax="proto3";
+
+
+package velolimits;
+
+option go_package = "achuala.in/velolimits/pbgen/velolimits;velolimits";
+
+import "google/api/annotations.proto";
+
+enum AggregationKey {
+    ACCOUNT = 0;
+    CUSTOMER = 1;
+}
+
+enum AggregationPeriod {
+    DAILY = 0;
+    WEEKLY = 1;
+    BIWEEKLY = 2;
+    MONTHLY = 3;
+    QUATERLY = 4;
+}
+
+message CountLimitsRule {
+    AggregationKey aggregation_key = 1;
+    AggregationPeriod aggregation_period = 2;
+    uint32 count = 3;
+}
+
+message TotalLimitsRule {
+    AggregationKey aggregation_key = 1;
+    AggregationPeriod aggregation_period = 2;
+    uint64 total = 3;
+}
+
+
+message CreateNewRuleRq {
+    oneof rule_def {
+        CountLimitsRule clr = 1;
+        TotalLimitsRule tlr = 2;
+    }
+}
+
+message CreateNewRuleRs {
+    string status = 1;
+    string rule_id = 2;
+}
+
+service VelocityLimit {
+    rpc CreateNewRule(CreateNewRuleRq) returns (CreateNewRuleRs) {
+        option (google.api.http) = {
+            post: "/v1/limits/rule"
+            body: "*"
+        };
+    }
+}
+
+

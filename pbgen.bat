@@ -1,0 +1,2 @@
+mkdir -p pbgen
+docker run -it --rm -v"${PWD}":/velolimits achuala/pb-gen:latest  --proto_path=/velolimits/proto --go_out="module=achuala.in/velolimits:/velolimits" --go-grpc_out="module=achuala.in/velolimits:/velolimits" --validate_out="module=achuala.in/velolimits,lang=go:/velolimits" limit_rules.proto
